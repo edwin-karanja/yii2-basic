@@ -30,10 +30,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'message:ntext',
+            'created_by',
+            [
+                    'label' => 'Owner',
+                    'value' => $model->owner->email
+            ],
+            'slug',
             'permissions',
-            'created_at',
-            'updated_at',
+            'created_at:datetime',
+            'updated_at:datetime',
         ],
     ]) ?>
+
+
 
 </div>

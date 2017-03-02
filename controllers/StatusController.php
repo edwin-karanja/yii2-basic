@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Status;
 use app\models\StatusSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -24,6 +25,18 @@ class StatusController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'create', 'update', 'view'],
+                'rules' => [
+                    // Allow only authenticated users
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    // everything else is denied
                 ],
             ],
         ];
@@ -68,6 +81,7 @@ class StatusController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->created_at = time();
             $model->updated_at = time();
+            $model->created_by = Yii::$app->user->getId();
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }

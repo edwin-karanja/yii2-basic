@@ -57,12 +57,20 @@ $config = [
 
     ],
     'modules' => [
+        'redactor' => [
+            'class' => 'yii\redactor\RedactorModule',
+            'uploadDir' => '@webroot/uploads',
+            'uploadUrl' => '@web/uploads',
+            ],
         'user' => [
             'class' => 'dektrium\user\Module',
             'enableUnconfirmedLogin' => true,
             'enableFlashMessages' => true,
             'confirmWithin' => 21600,
             'cost' => 12,
+            'modelMap' => [
+                'User' => 'app\models\User',
+            ],
             'admins' => ['admin', 'architect']
         ],
     ],
