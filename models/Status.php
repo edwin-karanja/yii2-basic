@@ -3,20 +3,39 @@
 namespace app\models;
 
 use Yii;
-use yii\base\Model;
+use yii\db\ActiveRecord;
 
-class Status extends Model
+/**
+ * This is the model class for table "status".
+ *
+ * @property integer $id
+ * @property string $message
+ * @property integer $permissions
+ * @property integer $created_at
+ * @property integer $updated_at
+ */
+class Status extends ActiveRecord
 {
     const PERMISSIONS_PRIVATE = 10;
     const PERMISSIONS_PUBLIC = 20;
 
-    public $text;
-    public $permissions;
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return 'status';
+    }
 
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [
-            [['text', 'permissions'], 'required'],
+            [['message', 'created_at', 'updated_at'], 'required'],
+            [['message'], 'string'],
+            [['permissions', 'created_at', 'updated_at'], 'integer'],
         ];
     }
 
@@ -25,14 +44,26 @@ class Status extends Model
         return [self::PERMISSIONS_PRIVATE => 'Private', self::PERMISSIONS_PUBLIC => 'Public'];
     }
 
-    public function getPermissionsLabel($permissions)
+    public function getPermissionsLabel($perm)
     {
-        if ($permissions == self::PERMISSIONS_PUBLIC) {
+        if ($perm == self::PERMISSIONS_PUBLIC) {
             return 'Public';
         } else {
             return 'Private';
         }
     }
 
-
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'message' => 'Message',
+            'permissions' => 'Permissions',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+        ];
+    }
 }
